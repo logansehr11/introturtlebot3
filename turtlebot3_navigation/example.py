@@ -4,6 +4,7 @@ from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import ReliabilityPolicy, QoSProfile
+
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 
 class Waypoint(Node):
@@ -20,7 +21,7 @@ class Waypoint(Node):
         self.pointNum = 0
         self.total = 5
         self.time = 0
-
+    
     def timer_callback(self):
         self.navigator.waitUntilNav2Active()
         pose = PoseStamped()
@@ -32,13 +33,6 @@ class Waypoint(Node):
         pose.pose.orientation.w = 0.0
         self.navigator.setInitialPose(pose)
 
-        execute_path()
-        feedback = self.navigator.getFeedback()
-        self.timer.cancel()
-        print('Time Elapsed: ' + self.time)
-        print('Feedback Timer: ' + feedback.navigation_time)
-
-    def execute_path(self):
         for i in range(self.total):
             self.navigator.goToPose(pose)
             self.pointNum += 1
@@ -47,6 +41,10 @@ class Waypoint(Node):
             pose.pose.position.y = self.hri_route[self.pointNum][1]
             if self.navigator.isTaskComplete():
                 break
+        feedback = self.navigator.getFeedback()
+        self.timer.cancel()
+        print('Time Elapsed: ' + self.time)
+        print('Feedback Timer: ' + feedback.navigation_time)
 
 def main(args=None):
     rclpy.init(args=args)
