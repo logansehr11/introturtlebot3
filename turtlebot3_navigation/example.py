@@ -18,7 +18,6 @@ class Waypoint(Node):
                         [6.298, -1.936],
                         [1.720, 1.430],
                         [-0.473, -1.339]]
-        self.pointNum = 0
         self.total = 5
         self.time = 0
     
@@ -33,18 +32,17 @@ class Waypoint(Node):
         pose.pose.orientation.w = 0.0
         self.navigator.setInitialPose(pose)
 
-        for i in range(self.total):
+        for (posx, posy) in hri_route:
             self.navigator.goToPose(pose)
-            self.pointNum += 1
             self.time += 1
-            pose.pose.position.x = self.hri_route[self.pointNum][0]
-            pose.pose.position.y = self.hri_route[self.pointNum][1]
-            if self.navigator.isTaskComplete():
-                break
+            pose.pose.position.x = posx
+            pose.pose.position.y = posy
+            while not self.navigator.isTaskComplete():
+                pass  
         feedback = self.navigator.getFeedback()
         self.timer.cancel()
-        print('Time Elapsed: ' + self.time)
-        print('Feedback Timer: ' + feedback.navigation_time)
+        print(f"Time Elapsed: {self.time}")
+        print(f"Feedback Timer: {feedback.navigation_time}")
 
 def main(args=None):
     rclpy.init(args=args)
