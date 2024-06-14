@@ -32,7 +32,7 @@ class Waypoint(Node):
         pose.pose.orientation.w = 0.0
         self.navigator.setInitialPose(pose)
 
-        for (posx, posy) in hri_route:
+        for (posx, posy) in self.hri_route:
             self.navigator.goToPose(pose)
             self.time += 1
             pose.pose.position.x = posx
