@@ -9,7 +9,7 @@ from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 class Waypoint(Node):
 
     def __init__(self):
-        super().__init__('nav_point_publisher')
+        super().__init__('nav2_waypoint')
         self.timer = self.create_timer(1, self.timer_callback)
         self.navigator = BasicNavigator()
         self.hri_route = [[2.587, -3.507],
